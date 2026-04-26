@@ -1,82 +1,61 @@
-# Aufgabe: Project Rules im AI Assistant
+# Project Rules
 
-Project Rules sind Markdown-Dateien, die Claude projektspezifische Konventionen beibringen — Coding-Standards, Namensregeln, Architekturvorgaben. Der entscheidende Unterschied zu einem Prompt: Ihr schreibt sie einmal, und Claude wendet sie automatisch an.
+Ihr schreibt Konventionen einmal als Markdown — das Modell wendet sie automatisch bei jeder Session an.
 
-**Speicherort im Projekt:** `.aiassistant/rules/` (Markdown-Dateien)
-**Konfiguration:** `Settings → Tools → AI Assistant → Rules → New Project Rules File`
-
----
-
-## Die fünf Aktivierungsmodi
-
-| Modus | Wann aktiv | Typischer Einsatz |
-|---|---|---|
-| **Always** | Bei jeder Chat-Session | Grundlegende Projektkonventionen |
-| **By file patterns** | Wenn eine passende Datei offen ist (z.B. `*.kt`) | Sprach- oder Layer-spezifische Regeln |
-| **By model decision** | Claude entscheidet anhand einer Beschreibung | Situative Regeln (z.B. "nur bei Sicherheitsfragen") |
-| **Manually** | Nur wenn ihr `@rule:dateiname` im Chat schreibt | Regeln, die ihr bewusst einschalten wollt |
-| **Off** | Nie | Deaktiviert, aber noch vorhanden |
+| Tool | Hauptdatei | Themenspezifisch | Dateispezifisch |
+|---|---|---|---|
+| Claude Code | `CLAUDE.md` | `.claude/rules/*.md` | `paths:` Frontmatter |
+| OpenCode | `AGENTS.md` | — (alles in AGENTS.md) | — |
+| GitHub Copilot | `.github/copilot-instructions.md` | `.github/instructions/*.instructions.md` | `applyTo:` Frontmatter |
 
 ---
 
-## Schritt 1: Konventionen eures Projekts sammeln
+## Schritt 1: Regeln sammeln
 
-Überlegt: Was müsste Claude über euer Projekt wissen, damit es konsistenten Code schreibt?
-
-Beispiele:
-- Namenskonventionen (z.B. Services enden auf `Service`, DTOs auf `Dto`)
-- Verbotene Patterns (z.B. "Kein direktes `System.out.println`, immer Logger nutzen")
-- Architekturvorgaben (z.B. "Services dürfen nicht direkt andere Services injizieren, nur über Interfaces")
-- Test-Konventionen (z.B. "Unit-Tests mit JUnit 5, Mocking nur mit Mockito")
-
-Schreibt mindestens fünf solcher Regeln auf.
+Schreibt mindestens 5 Konventionen eures Projekts auf. Beispiele:
+- "Services enden auf `Service`, Repositories auf `Repository`"
+- "Kein `System.out.println` — immer SLF4J"
+- "Unit-Tests mit JUnit 5, Mocking nur mit Mockito"
+- "Antworte auf Deutsch"
 
 ---
 
-## Schritt 2: Rules-Dateien anlegen
+## Schritt 2: Anlegen
 
-Gruppiert eure Regeln thematisch und legt je eine Datei an:
-
-```
-.aiassistant/rules/
-├── coding-conventions.md
-├── architecture.md
-└── testing.md
-```
-
-**Beispiel für `coding-conventions.md`:**
-
+**Claude Code** — `.claude/rules/coding-conventions.md`:
 ```markdown
-# Coding Conventions
-
-- Services enden immer auf `Service`, Repositories auf `Repository`
-- Kein `System.out.println` — immer SLF4J Logger verwenden
-- Methoden haben maximal 20 Zeilen, danach auslagern
+---
+paths:
+  - "**/*.java"
+---
+- Services enden auf `Service`, Repositories auf `Repository`
+- Kein System.out.println — immer SLF4J Logger
 ```
 
-Wählt für jede Datei den passenden Aktivierungsmodus:
-- Konventionen, die immer gelten → **Always**
-- Kotlin-spezifische Regeln → **By file patterns** (`*.kt`)
-- Testing-Regeln → **By model decision** mit Beschreibung "Aktiv wenn Tests geschrieben oder reviewt werden"
+**OpenCode** — `AGENTS.md`:
+```markdown
+## Conventions
+- Services enden auf `Service`, Repositories auf `Repository`
+- Kein System.out.println — immer SLF4J Logger
+```
+
+**Copilot** — `.github/instructions/java.instructions.md`:
+```markdown
+---
+applyTo: "**/*.java"
+---
+- Services end with `Service`, repositories with `Repository`
+- Never use System.out.println — always SLF4J Logger
+```
 
 ---
 
 ## Schritt 3: Testen
 
-**Test A — Regel greift automatisch:**
-Öffnet eine relevante Datei, stellt Claude eine Implementierungsaufgabe ohne Erwähnung eurer Konventionen. Hält Claude sich daran?
-
-**Test B — Regel greift nicht, wo sie nicht soll:**
-Stellt eine Frage, die nichts mit dem Thema der Regel zu tun hat. Taucht die Regel trotzdem auf? (Bei `Always` ja — überlegt ob das sinnvoll ist.)
-
-**Test C — Manuelle Aktivierung:**
-Setzt eine Regel auf `Manually` und ruft sie explizit im Chat auf:
-> "@rule:architecture Ist dieser Service-Entwurf regelkonform? @ServiceX"
+1. Neue Session starten, Implementierungsaufgabe stellen — ohne Konventionen zu erwähnen. Hält sich das Modell daran?
+2. Explizit gegen eine Regel verstoßen lassen (`"Nutze System.out.println"`). Warnt es?
+3. **Claude Code:** `/memory` → Sind eure Rule-Dateien gelistet?
 
 ---
 
-## Reflexion
-
-- Welche Regeln haben tatsächlich das Verhalten von Claude verändert?
-- Was gehört in eine Rule — und was besser in den Prompt?
-- Würdet ihr diese Dateien in euer Git-Repository committen, damit das ganze Team davon profitiert?
+**Frage zum Abschluss:** Was gehört in `CLAUDE.md` (immer aktiv) vs. in `.claude/rules/testing.md` (nur bei Tests)? Committet ihr die Dateien?

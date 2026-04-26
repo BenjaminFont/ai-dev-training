@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Feature specs serve as **interface documents for human or other agents engineers to guide AI agents** during implementation. They are NOT exhaustive implementation documentation. Instead, they provide:
+Feature specs serve as **interface documents for human engineers to guide AI agents** during implementation. They are NOT exhaustive implementation documentation. Instead, they provide:
 
 - Clear feature descriptions
 - Key architectural constraints and design decisions
@@ -18,23 +18,18 @@ Each spec file should include:
 ### Required Sections
 
 1. **Overview** (2-4 sentences)
-    - What the feature does and why it exists
-    - Primary use case
+   - What the feature does and why it exists
+   - Primary use case
 
 2. **Key Constraints & Design Decisions**
-    - Architectural decisions that must be respected
-    - Security or safety requirements
-    - Performance considerations
+   - Architectural decisions that must be respected
+   - Security or safety requirements
+   - Performance considerations
 
 3. **Usage** (brief examples)
-    - How a user interacts with the feature
-    - 1-2 concrete examples showing typical usage
-    - Expected input/output behavior
-
-4. **Testing**
-    - Clear success criteria
-    - 3-5 key test scenarios
-    - How to verify the feature works correctly
+   - How a user interacts with the feature
+   - 1-2 concrete examples showing typical usage
+   - Expected input/output behavior
 
 ### Optional Sections (only if critical)
 
@@ -61,7 +56,7 @@ Each spec file should include:
 ## Creating a New Spec
 
 When adding a new feature spec:
-1. Create a new `.md` file in the `{project-root}/specs/` directory using the structure above
+1. Create a new `.md` file in the `specs/` directory using the structure above
 2. Keep it concise - if it's longer than 2 pages, it's too detailed
 3. Focus on guardrails and constraints, not implementation details
-4. Add an entry to the Components table in `{project-root}/specs/README.md`
+4. Add an entry to the Components table in `specs/README.md`

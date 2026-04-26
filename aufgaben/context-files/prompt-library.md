@@ -1,59 +1,56 @@
-# Aufgabe: Prompt Library — Eigene Prompts für euer Team
+# Wiederverwendbare Prompts
 
-Im JetBrains AI Assistant könnt ihr wiederkehrende Prompts als Custom Prompts in der Prompt Library speichern. Statt denselben Prompt immer neu zu tippen, ruft ihr ihn mit zwei Klicks auf — direkt auf dem markierten Code.
+Prompts die ihr immer wieder tippt → einmal anlegen, immer abrufbar.
 
-**Konfigurationsort:** `Settings → Tools → AI Assistant → Prompt Library → +`
-
----
-
-## Was ihr bauen sollt
-
-Erstellt mindestens drei Custom Prompts für Aufgaben, die ihr in eurem Projekt regelmäßig macht.
-
-Die Variable `$SELECTION` fügt automatisch den markierten Code ein — ihr müsst ihn nicht kopieren.
+| Tool | Mechanismus | Aufruf |
+|---|---|---|
+| Claude Code | Skills in `.claude/skills/*.md` | `/skillname` im Chat |
+| OpenCode | Workflows in `AGENTS.md` beschreiben | Natürlichsprachlich triggern |
+| GitHub Copilot | `.github/prompts/*.prompt.md` | `#file:` Referenz oder "Run Prompt" in VS Code |
 
 ---
 
-## Schritt 1: Drei Kandidaten identifizieren
+## Schritt 1: Drei Kandidaten finden
 
-Überlegt: Welche Prompts tippt ihr immer wieder?
-
-Beispiele zur Inspiration — aber nutzt echte Fälle aus eurem Projekt:
-
-**Code Review:**
-> "Reviewe diesen Code aus der Perspektive eines Senior-Entwicklers. Fokus: Fehlerbehandlung, Lesbarkeit, mögliche Edge Cases. Gib konkrete Verbesserungsvorschläge:\n\n$SELECTION"
-
-**Test-Skeleton:**
-> "Schreibe ein Unit-Test-Skeleton für diesen Code. Nutze unser Test-Framework. Zeige nur die Testmethoden mit sprechenden Namen und TODO-Kommentaren — noch keinen Implementierungscode:\n\n$SELECTION"
-
-**Erklärung für PR-Beschreibung:**
-> "Erkläre diese Änderung in 3-5 Sätzen so, als würdest du sie in einer Pull-Request-Beschreibung für dein Team dokumentieren:\n\n$SELECTION"
+Welche Prompts tippt ihr täglich? Häufige Beispiele:
+- Code Review (Fehlerbehandlung, Edge Cases, Lesbarkeit)
+- Test-Skeleton generieren
+- PR-Beschreibung schreiben
 
 ---
 
-## Schritt 2: Prompts anlegen
+## Schritt 2: Anlegen
 
-Für jeden Prompt:
-1. `Settings → Tools → AI Assistant → Prompt Library → +`
-2. Namen vergeben (erscheint im AI Actions-Menü)
-3. Prompt-Text schreiben mit `$SELECTION` an der richtigen Stelle
-4. Entscheiden: "Wait for additional user input" aktivieren? (Sinnvoll wenn ihr noch eine Frage ergänzen wollt)
+**Claude Code** — `.claude/skills/review.md`:
+```markdown
+# Code Review
+
+Reviewe $ARGUMENTS als Senior-Entwickler.
+Fokus: Fehlerbehandlung, Edge Cases, Lesbarkeit.
+Ausgabe: nummerierte Liste mit konkreten Verbesserungen.
+```
+Aufruf: `/review OrderService.java`
+
+**Copilot** — `.github/prompts/review.prompt.md`:
+```markdown
+Reviewe den folgenden Code als Senior-Entwickler.
+Fokus: Fehlerbehandlung, Edge Cases, Lesbarkeit.
+Ausgabe: nummerierte Liste.
+
+Code: #file:${input:Dateiname}
+```
+
+**OpenCode** — in `AGENTS.md`:
+```markdown
+## Workflows
+Wenn ich "review [Datei]" sage: Analysiere als Senior-Entwickler,
+Fokus Fehlerbehandlung + Edge Cases, nummerierte Verbesserungsliste.
+```
 
 ---
 
-## Schritt 3: Testen
+## Schritt 3: Testen & verfeinern
 
-Markiert Code in eurem Projekt, öffnet das AI Actions-Menü (Rechtsklick → AI Actions oder `Alt+Enter`) und ruft jeden eurer Prompts auf.
+Testet jeden Prompt auf echtem Code. Ist der Output direkt nutzbar oder fehlt Kontext? Passt an bis er passt.
 
-Bewertet:
-- Ist der Output direkt nutzbar oder braucht es Nacharbeit?
-- Ist der Prompt zu allgemein oder zu eng?
-- Fehlt Kontext, den ihr noch ergänzen müsstet?
-
-Überarbeitet die Prompts bis sie für euren Alltag passen.
-
----
-
-## Ergebnis
-
-Ihr habt eine kleine team-spezifische Prompt Library für wiederkehrende Aufgaben. Überlegt am Schluss: Welche Prompts wären sinnvoll für alle im Team — und wie würdet ihr diese standardisieren?
+**Lohnt sich:** Welche dieser Prompts würden alle im Team nutzen? → Ins Repository committen.
