@@ -2,10 +2,7 @@
 
 Spec → Plan → Code. Wählt ein kleines Feature aus eurem Projekt.
 
-## Vorbereitung
-
-Kopiert `how-to-write-specs.md` und `how-to-write-plans.md` nach `docs/`.
-Die Project Rule `development-workflow.md` erzwingt den Workflow automatisch.
+> ⚠️ Voraussetzungen und Setup: siehe [how-to-sdd.md](../../how-to-sdd.md)
 
 ## Phase 1: Spec schreiben (~10 Min)
 

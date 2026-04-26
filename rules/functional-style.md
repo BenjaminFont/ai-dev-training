@@ -7,8 +7,8 @@ paths:
 # Functional Style
 
 These guidelines define functional programming principles
-for languages that support them well (TypeScript, Python,
-Rust). Go is excluded — Go's pragmatic style favors explicit
+for languages that support them well (TypeScript, Java).
+Go is excluded — Go's pragmatic style favors explicit
 loops and mutation over FP abstractions.
 
 ## Core Principles
