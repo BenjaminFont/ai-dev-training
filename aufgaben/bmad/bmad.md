@@ -4,19 +4,7 @@ BMAD (Breakthrough Method for Agile AI-Driven Development) ist ein Framework das
 
 Mehr dazu: https://docs.bmad-method.org/explanation/quick-dev/
 
-## Vorbereitung
-
-1. Legt in eurem Projekt einen neuen Branch an:
-   ```
-   git checkout -b bmad
-   ```
-
-2. Installiert BMAD (Bleeding Edge) im Projektverzeichnis:
-   ```
-   npx github:bmad-code-org/BMAD-METHOD install
-   ```
-   Hinweis: Diese Version zieht direkt vom `main`-Branch und kann instabil sein.
-   Folgt dem interaktiven Setup-Dialog und wählt die für euer Projekt passenden Optionen.
+> ⚠️ Voraussetzungen und Setup: siehe [how-to-bmad.md](../../how-to-bmad.md)
 
 ## Aufgabe
 
