@@ -21,6 +21,17 @@ cp -r .claudeAgentTeams/skills/ .claude/skills/
 cp -r .claudeAgentTeams/templates/ .claude/templates/
 cp -r .claudeAgentTeams/workflows/ .claude/workflows/
 cp .claudeAgentTeams/CLAUDE.md .claude/CLAUDE.md
+
+# Generalist rules (stack-independent) — always copy these:
+mkdir -p .claude/rules
+cp .claudeAgentTeams/rules/*.md .claude/rules/
+
+# Stack rules — copy only the language(s) your project uses:
+cp -r rules/python/     .claude/rules/   # Python
+cp -r rules/typescript/ .claude/rules/   # TypeScript
+cp -r rules/rust/       .claude/rules/   # Rust
+cp -r rules/go/         .claude/rules/   # Go
+cp -r rules/ci/         .claude/rules/   # GitHub Actions workflows
 ```
 
 **3. Enable the feature in `.claude/settings.json`:**
@@ -61,6 +72,17 @@ cp -r .claudeAgentTeams/skills/ .claude/skills/
 cp -r .claudeAgentTeams/templates/ .claude/templates/
 cp -r .claudeAgentTeams/workflows/ .claude/workflows/
 cp .claudeAgentTeams/CLAUDE.md .claude/CLAUDE.md
+
+# Generalistische Rules (sprachunabhängig) — immer kopieren:
+mkdir -p .claude/rules
+cp .claudeAgentTeams/rules/*.md .claude/rules/
+
+# Stack-Rules — nur die Sprache(n) kopieren, die dein Projekt nutzt:
+cp -r rules/python/     .claude/rules/   # Python
+cp -r rules/typescript/ .claude/rules/   # TypeScript
+cp -r rules/rust/       .claude/rules/   # Rust
+cp -r rules/go/         .claude/rules/   # Go
+cp -r rules/ci/         .claude/rules/   # GitHub Actions Workflows
 ```
 
 **3. Feature in `.claude/settings.json` aktivieren:**

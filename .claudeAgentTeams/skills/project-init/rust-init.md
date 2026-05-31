@@ -22,9 +22,17 @@ wildcard_enum_match_arm = "deny"             # silently ignores new variants whe
 unneeded_field_pattern = "deny"              # dead pattern arms that hide refactoring bugs
 fn_params_excessive_bools = "deny"           # boolean params are easy to swap — use enums
 must_use_candidate = "deny"                  # functions whose return value should not be ignored
+panic = "deny"                               # explicit panic!() — use proper error handling
+expect_used = "deny"                         # panics with a message — use proper error handling
+unwrap_used = "deny"                         # panics on None/Err — use proper error handling
+allow_attributes = "deny"                    # forces #[expect] over #[allow] — self-cleaning suppressions
+allow_attributes_without_reason = "deny"     # every lint suppression must document why
+missing_errors_doc = "warn"                  # document Errors section for fallible public functions
+missing_panics_doc = "warn"                  # document Panics section when a function can panic
 
 [lints.rust]
-warnings = "deny" # -D warnings
+missing_docs = "warn"                        # encourage doc comments on public items
+warnings = "deny"                            # -D warnings
 ```
 
 ## Workspace `Cargo.toml` (has `[workspace]`)
@@ -41,8 +49,16 @@ wildcard_enum_match_arm = "deny"
 unneeded_field_pattern = "deny"
 fn_params_excessive_bools = "deny"
 must_use_candidate = "deny"
+panic = "deny"
+expect_used = "deny"
+unwrap_used = "deny"
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
 
 [workspace.lints.rust]
+missing_docs = "warn"
 warnings = "deny" # -D warnings
 ```
 
@@ -56,3 +72,21 @@ duplicating config across crates.
 If a `Cargo.toml` already has a lints section, merge these
 entries into it. If any lint conflicts with an existing entry,
 keep the stricter setting (`"deny"` over `"warn"` over `"allow"`).
+
+## `clippy.toml`
+
+Create a `clippy.toml` at the workspace root (or project root
+for single-crate projects) with these test-specific allowances:
+
+```toml
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+allow-indexing-slicing-in-tests = true
+```
+
+These options tell Clippy not to fire `unwrap_used`,
+`expect_used`, `panic`, and `indexing_slicing` inside `#[cfg(test)]`
+modules and integration test files, so test code does not need
+`#[expect]` suppressions for these lints. The workspace-level
+`"deny"` settings in `Cargo.toml` still apply to production code.

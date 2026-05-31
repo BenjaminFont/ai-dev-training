@@ -1,5 +1,15 @@
 # How to Write Implementation Plans
 
+A plan is the **HOW and WHEN** -- purely technical. It answers how the
+work gets built, in what order, and how it is tested. It never
+re-negotiates the **WHAT** (that is the spec's job, or the agreed intent
+in chat). If a business question surfaces while planning, stop and go
+back to the spec / intent.
+
+A plan can be **fileless** (lives in chat, for the Plan-Track) or a file
+(`specs/<feature>-implementation-plan.md`). Promote a fileless plan to a
+file as soon as it must persist or be handed over.
+
 Unlike specs which are stable, implementation plans evolve during implementation.
 
 ## When to Create an Implementation Plan

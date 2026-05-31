@@ -16,18 +16,64 @@ allowed-tools: Read Glob Grep Write Edit AskUserQuestion Bash
 
 # Spec-Driven Development Workflow
 
-Guide the user through the full Spec → Plan → Implement
-cycle. Each phase is a separate conversation step with
-explicit user approval before moving on.
+Guide the user through Spec-Driven Development. The workflow
+scales to the change: a small change stays lightweight
+(in chat), a big or unclear one gets the full Spec → Plan →
+Implement cycle. Each phase is a separate conversation step
+with explicit user approval before moving on.
 
 ## Before Starting
 
 1. Read `docs/how-to-write-specs.md` for the spec format
 2. Read `docs/how-to-write-plans.md` for the plan format
-3. If these files don't exist, tell the user to copy them
-   first (see how-to-sdd.md)
+3. Read `rules/development-workflow.md` for track selection
+4. If these files don't exist, tell the user to copy them first
 
-## Phase 1: Write the Spec 
+## Step 0: Choose the Track (always do this first)
+
+Two questions decide everything. Ask them before any work.
+
+**Question 1 — Is the business requirement (WHAT/WHY) clear
+and uncontested?**
+- NO  → **Spec-Track** (File-Pfad): go to Phase 1.
+- YES → ask Question 2.
+
+**Question 2 — Is the HOW trivial / obvious?**
+- NO  → **Plan-Track** (fileless): skip Phase 1, go to Phase 2,
+        but keep the plan *in chat* unless it must persist.
+- YES → **Direkt-Track** (fileless): skip to Phase 3, implement
+        directly.
+
+Use **AskUserQuestion** to confirm the track when unsure. State
+which track you picked and why before proceeding.
+
+| Track | Spec? | Plan? | Where it lives |
+|-------|-------|-------|----------------|
+| Direkt | no | no | chat (fileless) |
+| Plan | no | yes | chat, promote to file if it must persist |
+| Spec | yes | yes | files in `specs/` |
+
+**Litmus test** for "do I need a spec": delete a sentence — if it
+changes what a *domain expert* agrees to, that's a spec (WHAT). If it
+only changes what a *developer* builds, that's a plan (HOW). Bugfixes,
+refactorings, config changes almost never need a spec.
+
+## Fileless tracks (Direkt & Plan): keep it light
+
+On the Direkt- and Plan-Track, do **not** create spec/plan files.
+
+- **Direkt-Track:** restate the agreed intent in one line, implement,
+  test, confirm. Done.
+- **Plan-Track:** write the plan **as a short chat message** following
+  `docs/how-to-write-plans.md` (steps + testing approach). Get approval
+  in chat, then implement step by step (Phase 3). **Promote** it to
+  `specs/<feature>-implementation-plan.md` only if it must persist or be
+  handed over.
+
+If, mid-work, a real business question appears, stop and escalate to the
+Spec-Track (Phase 1).
+
+## Phase 1: Write the Spec  (Spec-Track only)
 
 ### Step 1: Understand the Feature
 - Ask the user to describe the feature they want to build
@@ -45,11 +91,15 @@ explicit user approval before moving on.
 - Identify where the feature integrates
 
 ### Step 3: Draft the Spec
-Write the spec following `docs/how-to-write-specs.md`:
+Write the spec following `docs/how-to-write-specs.md`. Stay in
+**domain language** — WHAT and WHY only, no architecture:
 - **Overview** (2-4 sentences: what and why)
-- **Key Constraints & Design Decisions**
-- **Usage** (1-2 concrete examples)
+- **Business Constraints & Guardrails** (domain rules, not tech —
+  frameworks/data structures/algorithms belong in the plan)
+- **Usage** (1-2 concrete examples, behaviour the user sees)
 - Keep it to 1-2 pages maximum
+- Run the litmus test on each sentence: business stays, technical
+  moves to the plan
 
 ### Step 4: Save the Spec
 - Save to `specs/<feature-name>.md`
@@ -129,29 +179,31 @@ Before presenting the plan, verify:
 
 ## Important Rules
 
+- **Pick the track first** (Step 0) — don't default to the full
+  workflow for every change
+- **A spec is only for business clarification** (WHAT/WHY); never
+  put architecture in it
 - **Every phase requires user approval** before moving on
-- **Never skip the spec** for non-trivial features
 - **Never assume** — ask when something is unclear
-- **Keep specs short** — 1-2 pages max, focus on guardrails
-- **Plans evolve** — update them as you learn
+- **Keep specs short** — 1-2 pages max, domain language
+- **Plans evolve** — update them as you learn; the plan never
+  re-negotiates the WHAT
+- **Stay fileless when you can** — only the Spec-Track always uses
+  files; promote a fileless plan only when it must persist
 - **Step-by-step implementation** — one step at a time,
   wait for confirmation
 - **Language**: Follow the user's language (German/English)
 
-## When to Use the Full Workflow
+## Track Selection (summary)
 
-| Change | Workflow |
-|--------|----------|
-| New feature, new API, new entity | Spec → Plan → Implement |
-| Migration (DB, Framework, Library) | Spec → Plan → Implement |
-| Larger bugfix (unclear cause, multiple files) | Plan → Implement (Spec optional) |
-| Refactoring across multiple files | Plan → Implement |
-| Small bugfix (known cause, 1-2 files) | Implement directly |
-| Config change, typo, dependency update | Implement directly |
+| Change | Business req. clear? | HOW trivial? | Track |
+|--------|:---:|:---:|-------|
+| New feature / new entity, unclear WHAT | no | — | **Spec** |
+| Migration with open business questions | no | — | **Spec** |
+| Refactoring across multiple files | yes | no | **Plan** (fileless) |
+| Larger bugfix (unclear cause, multi-file) | yes | no | **Plan** (fileless) |
+| Small bugfix (known cause, 1-2 files) | yes | yes | **Direkt** |
+| Config change, typo, dependency update | yes | yes | **Direkt** |
 
-## Rule of Thumb
-
-If the change touches more than 3 files or the approach
-isn't immediately clear, write at least a plan. If the
-feature is new and others need to understand it, write
-a spec.
+The WHAT being clear is what removes the spec. The HOW being trivial is
+what removes the plan. See `rules/development-workflow.md`.

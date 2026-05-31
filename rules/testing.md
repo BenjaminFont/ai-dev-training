@@ -1,32 +1,32 @@
 # Testing Rules
 
-## Grundregeln
+## Core Rules
 
-- Neuer Code braucht Tests. Keine Ausnahmen.
-- Jeder Test ist isoliert -- keine Abhaengigkeiten zwischen Tests
-- Keine echten API-Calls, keine echten DB-Calls in Unit Tests
+- New code needs tests. No exceptions.
+- Every test is isolated -- no dependencies between tests
+- No real API calls, no real DB calls in unit tests
 
 ## Naming
 
-Testname beschreibt das erwartete Verhalten, nicht die Methode:
-- `shouldReturnUser_whenIdExists` statt `testGetUser`
-- `renders error message when login fails` statt `test login component`
+Test name describes the expected behavior, not the method:
+- `shouldReturnUser_whenIdExists` instead of `testGetUser`
+- `renders error message when login fails` instead of `test login component`
 
-## Struktur
+## Structure
 
-- Arrange-Act-Assert (Backend) / Given-When-Then
-- Setup und Teardown ueber Framework-Mechanismen, nicht manuell
-- Ein logischer Assert pro Test
+- Arrange-Act-Assert (backend) / Given-When-Then
+- Setup and teardown via framework mechanisms, not manually
+- One logical assert per test
 
-## Testdaten
+## Test Data
 
-- Factories oder Builder verwenden, nicht inline hardcoden
-- Keine magischen Werte ohne Erklaerung
-- Shared Fixtures nur wenn wirklich mehrere Tests identische Daten brauchen
+- Use factories or builders, don't hardcode inline
+- No magic values without explanation
+- Shared fixtures only when multiple tests genuinely need identical data
 
-## Was NICHT tun
+## What NOT to Do
 
-- Keine Business-Logik in Tests (kein if/else, keine Loops)
-- Keine Test-Reihenfolge-Abhaengigkeiten
-- Kein `Thread.sleep()` oder feste Timeouts -- async Utilities verwenden
-- Keine Tests die immer gruen sind (assert muss fehlschlagen koennen)
+- No business logic in tests (no if/else, no loops)
+- No test-order dependencies
+- No `Thread.sleep()` or fixed timeouts -- use async utilities
+- No tests that are always green (assert must be able to fail)
